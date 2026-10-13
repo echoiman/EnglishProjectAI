@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Emergency English</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070d18;--bg2:#0e1829;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.12);--txt:#e8eef7;--mute:#93a3b8;--red:#ff3b47;--amber:#ffb627;--green:#2fd48a;--cyan:#38d3f5}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(900px 500px at 85% -5%,rgba(255,59,71,.18),transparent),radial-gradient(700px 500px at -10% 30%,rgba(56,211,245,.10),transparent),var(--bg);color:var(--txt);line-height:1.6}
+h1,h2,h3,.logo,.n b,.rules b{font-family:'Space Grotesk',Inter,sans-serif}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+section{max-width:1100px;margin:0 auto;padding:64px 5vw}
+h2{font-size:clamp(1.8rem,4vw,2.5rem);margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 24px;max-width:62ch}
+
+.top{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 24px;padding:12px 5vw;background:rgba(7,13,24,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none}
+.logo i{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
+@media(prefers-reduced-motion:no-preference){.logo i{animation:blink 1.4s infinite}}
+@keyframes blink{50%{opacity:.25}}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav a{text-decoration:none;color:var(--mute);font-weight:500}
+nav a:hover{color:var(--txt)}
+
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding-top:80px}
+.badge{display:inline-block;margin:0 0 16px;padding:4px 14px;border:1px solid var(--red);border-radius:999px;color:var(--red);font-weight:600;font-size:.9rem}
+h1{font-size:clamp(2.6rem,7vw,4.6rem);line-height:1;margin:0 0 20px;letter-spacing:-.02em}
+.lead{color:var(--mute);font-size:1.1rem;max-width:50ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{border:0;border-radius:12px;padding:12px 22px;font-weight:600;text-decoration:none;display:inline-block;color:var(--txt)}
+.btn.red{background:var(--red);box-shadow:0 8px 24px rgba(255,59,71,.35)}
+.btn.red:hover{background:#ff5560}
+.btn.glass{background:var(--card);border:1px solid var(--line)}
+.btn.glass:hover{background:rgba(255,255,255,.12)}
+
+.monitor{background:linear-gradient(160deg,var(--bg2),#0a1220);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 0 60px rgba(255,59,71,.12)}
+.monitor svg{width:100%;height:auto;display:block}
+.ecg{fill:none;stroke:var(--green);stroke-width:3;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 6px var(--green));stroke-dasharray:600;stroke-dashoffset:600;animation:ecg 3s linear infinite}
+@keyframes ecg{to{stroke-dashoffset:-600}}
+@media(prefers-reduced-motion:reduce){.ecg{animation:none;stroke-dashoffset:0}}
+.grid4{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.n{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.n b{display:block;font-size:1.8rem;color:var(--amber)}
+.n span{color:var(--mute);font-size:.85rem}
+.n.big{grid-column:1/-1;background:rgba(255,59,71,.15);border-color:var(--red)}
+.n.big b{font-size:4rem;line-height:1;color:var(--red);text-shadow:0 0 24px rgba(255,59,71,.6)}
+
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding-top:0;padding-bottom:0}
+.rules div{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.rules b{flex:none;width:36px;height:36px;border-radius:50%;background:var(--amber);color:#111;display:grid;place-items:center}
+.rules p{margin:0;font-size:.95rem}
+
+.tools{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;margin-bottom:20px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:999px;padding:8px 16px;font-weight:600}
+.tab[aria-selected="true"]{background:var(--c,var(--red));border-color:transparent;color:#07101c}
+input,select{background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 14px}
+input::placeholder{color:#6b7c93}
+.phrases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.phrases button{width:100%;height:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:14px 16px;color:var(--txt)}
+.phrases button:hover{background:rgba(255,255,255,.1)}
+.phrases .en{display:block;font-weight:600}
+.phrases .ru{display:block;color:var(--mute);font-size:.92rem}
+
+.chatbox{background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:16px;max-width:760px}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding:4px}
+.msg{padding:10px 14px;border-radius:14px;max-width:88%;overflow-wrap:anywhere}
+.msg.bot,.msg.op{background:#16263f;align-self:flex-start;border-bottom-left-radius:4px}
+.msg.me{background:var(--red);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.sys{align-self:center;background:rgba(47,212,138,.2);color:var(--green);font-weight:600}
+.msg .ph{display:block;width:100%;text-align:left;background:rgba(255,255,255,.07);border:0;border-left:3px solid var(--amber);color:var(--txt);border-radius:8px;padding:8px 10px;margin-top:8px}
+.msg .ph small{display:block;color:var(--mute)}
+.msg .tip{display:block;margin-top:8px;color:var(--amber);font-size:.92rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.chip{background:transparent;border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:6px 14px;font-size:.9rem}
+.chip:hover{color:var(--txt);border-color:var(--cyan)}
+#aiForm{display:flex;gap:8px}
+#aiForm input{flex:1;min-width:0}
+
+.call .chat{max-width:640px;margin:16px 0;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:14px}
+.scenarios{display:flex;gap:8px;flex-wrap:wrap}
+.choices{display:grid;gap:10px;max-width:640px;margin-bottom:14px}
+.choice{text-align:left;background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:12px 16px;font-weight:500}
+.choice:hover:not(:disabled){border-color:var(--cyan)}
+.choice.right{background:rgba(47,212,138,.2);border-color:var(--green)}
+.choice.wrong{background:rgba(255,59,71,.2);border-color:var(--red)}
+
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:20px}
+.builder label{display:grid;gap:6px;color:var(--mute);font-weight:500;font-size:.92rem}
+.result{grid-column:1/-1;display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:rgba(255,182,39,.1);border:1px dashed var(--amber);border-radius:14px;padding:16px}
+.result p{margin:0;flex:1;min-width:220px;font-weight:600;font-size:1.05rem}
+
+.quizbox{background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:24px;max-width:720px}
+.quizbox h3{font-size:1.4rem;margin:4px 0 16px}
+.progress{margin:0;color:var(--mute);font-weight:600}
+.feedback{min-height:1.6em;font-weight:600}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h3{margin:0 0 8px;color:var(--amber)}
+.card p{margin:0}
+footer{text-align:center;padding:24px;color:var(--mute);border-top:1px solid var(--line);font-size:.9rem}
+
+@media(max-width:820px){
+  .hero,.cards,.builder,.phrases{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr 1fr}
+  section{padding:48px 5vw}
+}
+
+html{padding-bottom:env(safe-area-inset-bottom,0px)}
+.top{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#home"><i></i>AI Emergency English</a>
+  <nav>
+    <a href="#phrases">Phrases</a><a href="#ai">AI Helper</a><a href="#call">Call</a>
+    <a href="#builder">Script</a><a href="#quiz">Quiz</a><a href="#about">About</a>
+  </nav>
+</header>
+<main>
+<section class="hero" id="home">
+  <div class="hero-text">
+    <p class="badge">Class 8B project</p>
+    <h1>Emergency English<br>in one tap.</h1>
+    <p class="lead">A visual model of useful English for emergency situations: phrases with sound, an AI helper chat, a practice call to 112 and a quiz.</p>
+    <div class="cta">
+      <a class="btn red" href="#ai">Ask AI Helper</a>
+      <button class="btn glass say" data-say="Help! I need an ambulance!">🔊 Help! I need an ambulance!</button>
+    </div>
+  </div>
+  <div class="monitor">
+    <svg viewBox="0 0 400 120" aria-hidden="true"><path class="ecg" d="M0 60 H90 L105 60 L120 15 L140 105 L155 60 H230 L245 60 L260 25 L280 95 L295 60 H400"/></svg>
+    <div class="grid4">
+      <div class="n big"><b>112</b><span>All emergencies</span></div>
+      <div class="n"><b>101</b><span>Fire</span></div>
+      <div class="n"><b>102</b><span>Police</span></div>
+      <div class="n"><b>103</b><span>Ambulance</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="rules">
+  <div><b>1</b><p>Stay calm and speak slowly.</p></div>
+  <div><b>2</b><p>Say WHAT happened.</p></div>
+  <div><b>3</b><p>Say WHERE you are.</p></div>
+  <div><b>4</b><p>Say WHO needs help. Do not hang up.</p></div>
+</section>
+
+<section id="phrases">
+  <h2>Phrases by situation</h2>
+  <div class="tools"><div class="tabs" id="tabs"></div><input id="search" type="search" placeholder="Search phrase (EN / RU)" aria-label="Search phrases"></div>
+  <ul class="phrases" id="phraseList"></ul>
+</section>
+
+<section id="ai" class="ai">
+  <h2>AI Helper</h2>
+  <p class="sub">Describe your situation in English or Russian. The helper gives you the exact English words to say. (Offline helper with built-in knowledge.)</p>
+  <div class="chatbox">
+    <div class="chat" id="aiChat" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
+    <form id="aiForm"><input id="aiInput" placeholder="Example: my friend fainted / пожар / I am lost" autocomplete="off"><button class="btn red" type="submit">Send</button></form>
+  </div>
+</section>
+
+<section id="call" class="call">
+  <h2>Practice a call to 112</h2>
+  <p class="sub">Choose the best answer to each question from the operator.</p>
+  <div class="scenarios" id="scenarioTabs"></div>
+  <div class="chat" id="chat" aria-live="polite"></div>
+  <div class="choices" id="choices"></div>
+  <button class="btn glass" id="restartCall">Start again</button>
+</section>
+
+<section id="builder">
+  <h2>Build your emergency script</h2>
+  <p class="sub">Fill in the fields and get a ready sentence to say on the phone.</p>
+  <div class="builder">
+    <label>Problem
+      <select id="bProblem">
+        <option value="There is a fire">Fire</option>
+        <option value="Someone is badly hurt">Injury</option>
+        <option value="Someone is not breathing">Not breathing</option>
+        <option value="There has been a car accident">Car accident</option>
+        <option value="Someone is trying to break into my house">Break-in</option>
+        <option value="A child is lost">Lost child</option>
+      </select></label>
+    <label>Address <input id="bAddress" placeholder="15 Abai Street, Oral"></label>
+    <label>Your name <input id="bName" placeholder="Aidar"></label>
+    <label>Number of people <input id="bPeople" type="number" min="1" value="1"></label>
+    <div class="result"><p id="bResult"></p><button class="btn red say-result" type="button">🔊 Listen</button></div>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>Quick quiz</h2>
+  <div class="quizbox">
+    <p class="progress" id="qProgress"></p>
+    <h3 id="qText"></h3>
+    <div class="choices" id="qChoices"></div>
+    <p class="feedback" id="qFeedback" aria-live="polite"></p>
+    <button class="btn glass" id="qNext" hidden>Next question</button>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <h2>About the project</h2>
+  <div class="cards">
+    <div class="card"><h3>Topic</h3><p>AI Emergency English: Creating a visual model for useful English in Emergency Situations.</p></div>
+    <div class="card"><h3>Authors</h3><p>Nurbolat Shugyla<br>Tlekkabulova Ainamkoz<br>Class 8B</p></div>
+    <div class="card"><h3>Goal</h3><p>Help students remember short, clear English phrases for dangerous situations, for example when travelling abroad.</p></div>
+  </div>
+</section>
+</main>
+<footer>© 2026 Nurbolat Shugyla &amp; Tlekkabulova Ainamkoz, 8B</footer>
+<script>
+/* ===== Speech ===== */
+function speak(t){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = 'en-US'; u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+document.querySelectorAll('.say').forEach(b => b.addEventListener('click', () => speak(b.dataset.say)));
+const $ = id => document.getElementById(id);
+const shuffle = a => a.map(v => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map(p => p[1]);
+
+/* ===== Phrase database ===== */
+const topics = {
+  'Fire': { color:'#ff3b47', items:[
+    ['Fire! Call the fire brigade!','Пожар! Вызовите пожарных!'],
+    ['There is a fire in the building.','В здании пожар.'],
+    ['Get out now! Use the stairs, not the lift.','Выходите! По лестнице, не на лифте.'],
+    ['Stay low and cover your mouth.','Пригнитесь и закройте рот.'],
+    ['Is everyone out?','Все вышли?'],
+    ['Do not go back inside.','Не возвращайтесь внутрь.'],
+    ['There is a lot of smoke.','Много дыма.'],
+    ['Where is the fire exit?','Где пожарный выход?']
+  ]},
+  'Medical': { color:'#2fd48a', items:[
+    ['I need an ambulance!','Мне нужна скорая помощь!'],
+    ['He is not breathing.','Он не дышит.'],
+    ['She is unconscious.','Она без сознания.'],
+    ['I am allergic to penicillin.','У меня аллергия на пенициллин.'],
+    ['My chest hurts.','У меня болит в груди.'],
+    ['I feel dizzy and sick.','У меня кружится голова и тошнит.'],
+    ['He is bleeding badly.','У него сильное кровотечение.'],
+    ['I think my arm is broken.','Кажется, у меня сломана рука.']
+  ]},
+  'Danger': { color:'#ffb627', items:[
+    ['Help! Call the police!','Помогите! Вызовите полицию!'],
+    ['Someone is following me.','За мной кто-то идёт.'],
+    ['My bag has been stolen.','У меня украли сумку.'],
+    ['I am lost. Can you help me?','Я потерялся. Вы можете помочь?'],
+    ['Please stay with me.','Пожалуйста, останьтесь со мной.'],
+    ['Someone is breaking into my house.','Кто-то взламывает мой дом.'],
+    ['Leave me alone!','Оставьте меня в покое!'],
+    ['I need to find a safe place.','Мне нужно безопасное место.']
+  ]},
+  'Natural disaster': { color:'#38d3f5', items:[
+    ['Earthquake! Take cover under a table.','Землетрясение! Спрячьтесь под стол.'],
+    ['Move to higher ground. There is a flood.','Идите на возвышенность. Наводнение.'],
+    ['Stay away from windows.','Держитесь подальше от окон.'],
+    ['Where is the nearest shelter?','Где ближайшее убежище?'],
+    ['Follow the evacuation signs.','Следуйте знакам эвакуации.'],
+    ['A storm is coming. Stay indoors.','Приближается буря. Оставайтесь дома.'],
+    ['The road is blocked.','Дорога заблокирована.'],
+    ['Is it safe to go outside?','Безопасно ли выходить?']
+  ]},
+  'Road accident': { color:'#b48cff', items:[
+    ['There has been a car accident.','Произошла авария.'],
+    ['Two cars crashed on the main road.','Две машины столкнулись на главной дороге.'],
+    ['Do not move him.','Не двигайте его.'],
+    ['Turn off the engine.','Выключите двигатель.'],
+    ['Put on your seat belt.','Пристегните ремень.'],
+    ['Are you hurt?','Вы ранены?'],
+    ['Please call an ambulance.','Пожалуйста, вызовите скорую.'],
+    ['I can give my insurance details.','Я могу дать данные страховки.']
+  ]},
+  'Useful words': { color:'#ff7ab8', items:[
+    ['Emergency','Чрезвычайная ситуация'],
+    ['Hospital / Pharmacy','Больница / Аптека'],
+    ['Doctor / Nurse','Врач / Медсестра'],
+    ['Quick! Hurry up!','Быстрее!'],
+    ['Do you speak Russian?','Вы говорите по-русски?'],
+    ['I do not understand. Please speak slowly.','Я не понимаю. Говорите медленно.'],
+    ['What is your name?','Как вас зовут?'],
+    ['I need an interpreter.','Мне нужен переводчик.']
+  ]}
+};
+
+const tabsEl = $('tabs'), listEl = $('phraseList'), searchEl = $('search');
+let currentTopic = 'Fire';
+function card(en, ru, color){
+  const li = document.createElement('li'), b = document.createElement('button');
+  b.style.setProperty('--c', color);
+  b.innerHTML = '<span class="en">🔊 ' + en + '</span><span class="ru">' + ru + '</span>';
+  b.onclick = () => speak(en);
+  li.appendChild(b); return li;
+}
+function renderPhrases(){
+  const q = searchEl.value.trim().toLowerCase();
+  listEl.innerHTML = '';
+  tabsEl.querySelectorAll('.tab').forEach(t => {
+    const on = !q && t.textContent === currentTopic;
+    t.setAttribute('aria-selected', on);
+    t.style.setProperty('--c', topics[t.textContent].color);
+  });
+  const names = q ? Object.keys(topics) : [currentTopic];
+  names.forEach(n => topics[n].items.forEach(([en, ru]) => {
+    if(!q || (en + ' ' + ru).toLowerCase().includes(q)) listEl.appendChild(card(en, ru, topics[n].color));
+  }));
+  if(!listEl.children.length) listEl.innerHTML = '<li class="sub">Nothing found. Try another word.</li>';
+}
+Object.keys(topics).forEach(n => {
+  const b = document.createElement('button');
+  b.className = 'tab'; b.textContent = n;
+  b.onclick = () => { currentTopic = n; searchEl.value = ''; renderPhrases(); };
+  tabsEl.appendChild(b);
+});
+searchEl.addEventListener('input', renderPhrases);
+renderPhrases();
+
+/* ===== AI Helper (built-in knowledge, no internet) ===== */
+const kb = [
+  { keys:['fire','пожар','горит','дым','smoke','burn'], t:'Fire', say:'Stay calm. Leave the building first, then call 101 or 112.',
+    ph:[['Fire! There is a fire at 15 Abai Street!','Пожар! Горит по адресу Абая 15!'],['Please send the fire brigade.','Пришлите пожарных.'],['Everyone is out of the building.','Все вышли из здания.']],
+    tip:'Do not use the lift. Do not go back for your things.' },
+  { keys:['breath','дыш','faint','сознан','unconscious','обморок','упал','collapsed'], t:'Not breathing / fainted', say:'Call 103 or 112 immediately.',
+    ph:[['He is not breathing. Please send an ambulance!','Он не дышит. Пришлите скорую!'],['She is unconscious but she has a pulse.','Она без сознания, но пульс есть.'],['Tell me what to do.','Скажите, что мне делать.']],
+    tip:'Stay on the line. The operator will give instructions.' },
+  { keys:['ambulance','скорая','doctor','врач','hurt','болит','pain','ранен','blood','кров','broken','слом','injur','травм','ill','sick','плохо'], t:'Medical help', say:'Say what happened, where you are and who needs help.',
+    ph:[['I need an ambulance. My friend is badly hurt.','Нужна скорая. Мой друг тяжело ранен.'],['He is bleeding badly.','У него сильное кровотечение.'],['It hurts here.','Болит вот здесь.']],
+    tip:'Say any allergies or medicines: "I am allergic to..."' },
+  { keys:['police','полиц','steal','украл','stolen','вор','thief','follow','преслед','attack','напал','break','взлом','danger','опасн'], t:'Danger / crime', say:'Move to a safe, public place and call 102 or 112.',
+    ph:[['Help! Call the police!','Помогите! Вызовите полицию!'],['Someone is following me.','За мной кто-то идёт.'],['My phone has been stolen.','У меня украли телефон.']],
+    tip:'Do not argue. Your safety is more important than your things.' },
+  { keys:['lost','потерял','заблудил','missing','пропал','child','ребен','ребён'], t:'Lost person', say:'Find a police officer, a shop worker or a security guard.',
+    ph:[['I am lost. Can you help me?','Я потерялся. Вы можете помочь?'],['My little sister is missing.','Моя младшая сестра пропала.'],['She is seven. She has a red jacket.','Ей семь. На ней красная куртка.']],
+    tip:'Give age, clothes and the last place you saw the person.' },
+  { keys:['earthquake','землетряс','flood','наводн','storm','буря','ураган','disaster','бедств','evacuat','эвакуац'], t:'Natural disaster', say:'Drop, cover and hold on. Then follow the evacuation signs.',
+    ph:[['Earthquake! Take cover under a table!','Землетрясение! Прячьтесь под стол!'],['Where is the nearest shelter?','Где ближайшее убежище?'],['Is it safe to go outside?','Безопасно ли выходить?']],
+    tip:'Stay away from windows, glass and heavy furniture.' },
+  { keys:['car','авари','crash','машин','accident','дтп','road'], t:'Road accident', say:'Move to a safe place and call 112.',
+    ph:[['There has been a car accident on Abai Street.','Авария на улице Абая.'],['Two people are injured.','Двое пострадавших.'],['Please do not move him.','Пожалуйста, не двигайте его.']],
+    tip:'Turn on hazard lights and do not move injured people.' },
+  { keys:['address','адрес','where','где','location'], t:'Giving your address', say:'Always say the street, the number and the city.',
+    ph:[['I am at 15 Abai Street, Oral.','Я на улице Абая 15, Уральск.'],['It is next to the supermarket.','Это рядом с супермаркетом.'],['Can you spell that, please?','Продиктуйте по буквам, пожалуйста.']],
+    tip:'Say a landmark if you are not sure of the address.' },
+  { keys:['hello','hi','привет','здравств','thanks','спасибо'], t:'Hello', say:'Hello! Tell me what is happening and I will give you the English words to say.', ph:[], tip:'' }
+];
+const chat = $('aiChat'), input = $('aiInput');
+function bubble(cls, html){
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls; d.innerHTML = html;
+  chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d;
+}
+function botReply(text){
+  const q = text.toLowerCase();
+  let best = null, score = 0;
+  kb.forEach(e => { const s = e.keys.filter(k => q.includes(k)).length; if(s > score){ score = s; best = e; } });
+  const d = document.createElement('div');
+  d.className = 'msg bot';
+  if(!best){
+    d.innerHTML = 'I am not sure I understand. Try one of these: <b>fire, medical, police, lost, earthquake, car accident, address</b>. In an emergency, call <b>112</b>.';
+  } else {
+    d.innerHTML = '<b>' + best.t + '</b><br>' + best.say;
+    best.ph.forEach(([en, ru]) => {
+      const b = document.createElement('button');
+      b.className = 'ph'; b.innerHTML = '🔊 ' + en + '<small>' + ru + '</small>';
+      b.onclick = () => speak(en); d.appendChild(b);
+    });
+    if(best.tip){ const t = document.createElement('span'); t.className = 'tip'; t.textContent = '⚠ ' + best.tip; d.appendChild(t); }
+  }
+  setTimeout(() => { chat.appendChild(d); chat.scrollTop = chat.scrollHeight; }, 500);
+}
+function ask(text){
+  if(!text.trim()) return;
+  const me = bubble('me', ''); me.textContent = text;
+  botReply(text);
+}
+$('aiForm').addEventListener('submit', e => { e.preventDefault(); ask(input.value); input.value = ''; });
+['Fire / пожар','Someone fainted','I am lost','Police / полиция','Earthquake','Car accident','What is my address?'].forEach(c => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.textContent = c;
+  b.onclick = () => ask(c); $('chips').appendChild(b);
+});
+bubble('bot', 'Hi! I am your Emergency English helper. Tell me what is happening and I will give you the words to say. 🔊 Tap any phrase to hear it.');
+
+/* ===== Call practice ===== */
+const scenarios = {
+  'House fire': [
+    ['112, what is your emergency?', [['There is a fire in my house!',1],['I want to order pizza.',0],['Hello, how are you?',0]]],
+    ['What is your address?', [['I do not know.',0],['It is 15 Abai Street, Oral.',1],['It is a big house.',0]]],
+    ['Is anyone hurt?', [['Yes, my brother cannot breathe.',1],['No, it is sunny today.',0],['Maybe tomorrow.',0]]],
+    ['Get out of the house now. Help is on the way. What is your name?', [['My name is Aidar. Please hurry!',1],['I will call you later.',0],['Goodbye!',0]]]
+  ],
+  'Medical': [
+    ['112, what is your emergency?', [['My grandfather has fallen and he cannot get up.',1],['I lost my pen.',0],['I am bored.',0]]],
+    ['Is he awake and breathing?', [['Yes, he is awake and breathing.',1],['He likes tea.',0],['No problem.',0]]],
+    ['Where are you?', [['I am at 7 Satpaev Street, Oral.',1],['I am fine, thanks.',0],['Tomorrow.',0]]],
+    ['Does he take any medicine?', [['Yes, he takes heart tablets.',1],['I like medicine.',0],['No, thank you.',0]]]
+  ],
+  'Car accident': [
+    ['112, what is your emergency?', [['There has been a car accident.',1],['My car is blue.',0],['I am hungry.',0]]],
+    ['Where did it happen?', [['On the main road near the bridge.',1],['Yesterday.',0],['In my bag.',0]]],
+    ['How many people are injured?', [['Two people are injured.',1],['Two apples.',0],['I do not like cars.',0]]],
+    ['Do not move the injured. Stay on the line.', [['OK. I am staying here.',1],['Bye now.',0],['I am leaving.',0]]]
+  ]
+};
+const callChat = $('chat'), callChoices = $('choices'), scTabs = $('scenarioTabs');
+let sc = 'House fire', step = 0;
+function addMsg(t, cls){ const d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = t; callChat.appendChild(d); callChat.scrollTop = callChat.scrollHeight; }
+function nextCall(){
+  callChoices.innerHTML = '';
+  const steps = scenarios[sc];
+  if(step >= steps.length){ addMsg('Well done! You gave clear information.', 'sys'); return; }
+  const [op, opts] = steps[step];
+  addMsg(op, 'op'); speak(op);
+  shuffle(opts).forEach(([text, ok]) => {
+    const b = document.createElement('button');
+    b.className = 'choice'; b.textContent = text;
+    b.onclick = () => {
+      if(ok){ addMsg(text, 'me'); step++; setTimeout(nextCall, 500); }
+      else { b.classList.add('wrong'); b.disabled = true; b.textContent = text + ' (not helpful, try again)'; }
+    };
+    callChoices.appendChild(b);
+  });
+}
+function startCall(){ step = 0; callChat.innerHTML = ''; scTabs.querySelectorAll('.tab').forEach(t => { t.setAttribute('aria-selected', t.textContent === sc); t.style.setProperty('--c', '#ff3b47'); }); nextCall(); }
+Object.keys(scenarios).forEach(n => {
+  const b = document.createElement('button');
+  b.className = 'tab'; b.textContent = n;
+  b.onclick = () => { sc = n; startCall(); }; scTabs.appendChild(b);
+});
+$('restartCall').onclick = startCall;
+startCall();
+
+/* ===== Script builder ===== */
+function buildScript(){
+  const p = $('bProblem').value;
+  const a = $('bAddress').value.trim() || '[your address]';
+  const n = $('bName').value.trim() || '[your name]';
+  const k = Math.max(1, parseInt($('bPeople').value) || 1);
+  const who = k === 1 ? 'One person needs help.' : k + ' people need help.';
+  $('bResult').textContent = p + ' at ' + a + '. ' + who + ' My name is ' + n + '. Please hurry!';
+}
+['bProblem','bAddress','bName','bPeople'].forEach(id => $(id).addEventListener('input', buildScript));
+document.querySelector('.say-result').onclick = () => speak($('bResult').textContent);
+buildScript();
+
+/* ===== Quiz ===== */
+const quiz = [
+  ['What number do you call for all emergencies in Kazakhstan?',['112','911','999']],
+  ['What does "Help!" mean?',['Помогите!','Привет!','Спасибо!']],
+  ['Which phrase do you say when someone does not breathe?',['He is not breathing.','He is very tall.','He is hungry.']],
+  ['During an earthquake you should...',['take cover under a table','use the lift','go to the window']],
+  ['"Fire brigade" in Russian is...',['пожарная служба','скорая помощь','полиция']],
+  ['Which number is for the ambulance?',['103','101','102']],
+  ['You are lost. What do you say?',['I am lost. Can you help me?','I am happy.','I like this place.']],
+  ['What should you do first on a call to 112?',['Say what happened and where you are','Hang up','Tell a long story']],
+  ['"Unconscious" means...',['без сознания','голодный','уставший']]
+];
+let qi = 0, score = 0;
+function showQ(){
+  $('qFeedback').textContent = ''; $('qNext').hidden = true; $('qChoices').innerHTML = '';
+  if(qi >= quiz.length){
+    $('qProgress').textContent = 'Finished';
+    $('qText').textContent = 'Your score: ' + score + ' / ' + quiz.length + (score >= 7 ? ' 🏆 Great job!' : ' Try again!');
+    $('qNext').textContent = 'Try again'; $('qNext').hidden = false;
+    $('qNext').onclick = () => { qi = 0; score = 0; showQ(); }; return;
+  }
+  const [q, a] = quiz[qi], correct = a[0];
+  $('qProgress').textContent = 'Question ' + (qi + 1) + ' of ' + quiz.length;
+  $('qText').textContent = q; $('qNext').textContent = 'Next question';
+  $('qNext').onclick = () => { qi++; showQ(); };
+  shuffle(a).forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'choice'; b.textContent = opt;
+    b.onclick = () => {
+      $('qChoices').querySelectorAll('.choice').forEach(x => { x.disabled = true; if(x.textContent === correct) x.classList.add('right'); });
+      if(opt === correct){ score++; $('qFeedback').textContent = 'Correct!'; }
+      else { b.classList.add('wrong'); $('qFeedback').textContent = 'Not quite. Right answer: ' + correct; }
+      $('qNext').hidden = false;
+    };
+    $('qChoices').appendChild(b);
+  });
+}
+showQ();
+
+</script>
+</body>
+</html>
