@@ -113,6 +113,27 @@ footer{text-align:center;padding:24px;color:var(--mute);border-top:1px solid var
   section{padding:48px 5vw}
 }
 
+.fc-wrap{max-width:640px}
+.flash{width:100%;min-height:210px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:24px;text-align:center;color:var(--txt);background:linear-gradient(160deg,#16263f,#0e1829);border:1px solid var(--line);border-radius:20px;box-shadow:0 0 40px rgba(56,211,245,.08)}
+.flash span{color:var(--cyan);font-weight:600;font-size:.9rem}
+.flash b{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.4rem,4vw,2rem);line-height:1.25}
+.flash.ru{border-color:var(--amber);box-shadow:0 0 40px rgba(255,182,39,.12)}
+.flash.ru span{color:var(--amber)}
+.fc-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.signs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sign{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 10px;color:var(--txt);text-align:center}
+.sign:hover{border-color:var(--amber)}
+.sign i{display:block;font-style:normal;font-size:2.2rem}
+.sign b{display:block;margin-top:6px}
+.sign small{color:var(--mute)}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:4px 16px}
+summary{cursor:pointer;font-weight:600;padding:12px 0;font-family:'Space Grotesk',sans-serif;font-size:1.1rem}
+details ol{margin:0 0 12px;padding:0;list-style:none;counter-increment:s}
+details li{margin:6px 0}
+details li button{width:100%;text-align:left;background:rgba(255,255,255,.05);border:0;border-left:4px solid var(--green);color:var(--txt);border-radius:8px;padding:10px 12px}
+details li small{display:block;color:var(--mute)}
+@media(max-width:820px){.signs{grid-template-columns:1fr 1fr}}
+
 html{padding-bottom:env(safe-area-inset-bottom,0px)}
 .top{padding-top:calc(12px + env(safe-area-inset-top,0px))}
 </style>
@@ -121,7 +142,7 @@ html{padding-bottom:env(safe-area-inset-bottom,0px)}
 <header class="top">
   <a class="logo" href="#home"><i></i>AI Emergency English</a>
   <nav>
-    <a href="#phrases">Phrases</a><a href="#ai">AI Helper</a><a href="#call">Call</a>
+    <a href="#phrases">Phrases</a><a href="#ai">AI Helper</a><a href="#cards">Cards</a><a href="#signs">Signs</a><a href="#aid">First aid</a><a href="#call">Call</a>
     <a href="#builder">Script</a><a href="#quiz">Quiz</a><a href="#about">About</a>
   </nav>
 </header>
@@ -133,6 +154,7 @@ html{padding-bottom:env(safe-area-inset-bottom,0px)}
     <p class="lead">A visual model of useful English for emergency situations: phrases with sound, an AI helper chat, a practice call to 112 and a quiz.</p>
     <div class="cta">
       <a class="btn red" href="#ai">Ask AI Helper</a>
+      <button class="btn glass" id="randBtn" type="button">🎲 Random phrase</button>
       <button class="btn glass say" data-say="Help! I need an ambulance!">🔊 Help! I need an ambulance!</button>
     </div>
   </div>
@@ -168,6 +190,33 @@ html{padding-bottom:env(safe-area-inset-bottom,0px)}
     <div class="chips" id="chips"></div>
     <form id="aiForm"><input id="aiInput" placeholder="Example: my friend fainted / пожар / I am lost" autocomplete="off"><button class="btn red" type="submit">Send</button></form>
   </div>
+</section>
+
+<section id="cards">
+  <h2>Flashcards</h2>
+  <p class="sub">Tap the card to flip it. Learn the phrase, then check yourself.</p>
+  <div class="fc-wrap">
+    <button class="flash" id="flash" type="button" aria-live="polite"><span id="fcSide">English</span><b id="fcText"></b></button>
+    <div class="fc-bar">
+      <button class="btn glass" id="fcSay" type="button">🔊 Listen</button>
+      <button class="btn glass" id="fcShuffle" type="button">🔀 Shuffle</button>
+      <button class="btn glass" id="fcKnow" type="button">✅ I know it</button>
+      <button class="btn red" id="fcNext" type="button">Next</button>
+    </div>
+    <p class="sub" id="fcCount"></p>
+  </div>
+</section>
+
+<section id="signs">
+  <h2>Signs and warnings</h2>
+  <p class="sub">Words you can see on signs. Tap to hear them.</p>
+  <div class="signs" id="signGrid"></div>
+</section>
+
+<section id="aid">
+  <h2>First aid steps</h2>
+  <p class="sub">Short steps in English. Tap a step to hear it. This is not a replacement for a doctor: call 103 or 112 first.</p>
+  <div id="aidList"></div>
 </section>
 
 <section id="call" class="call">
@@ -297,6 +346,48 @@ const topics = {
   ]}
 };
 
+Object.assign(topics, {
+  'Hospital': { color:'#4da3ff', items:[
+    ['I have an appointment.','У меня запись к врачу.'],
+    ['I have a fever and a headache.','У меня температура и болит голова.'],
+    ['I have a sore throat and a cough.','У меня болит горло и кашель.'],
+    ['How long will I wait?','Сколько мне ждать?'],
+    ['I take this medicine every day.','Я принимаю это лекарство каждый день.'],
+    ['Where is the pharmacy?','Где аптека?'],
+    ['Can you write it down, please?','Напишите, пожалуйста.'],
+    ['Do I need an operation?','Нужна ли мне операция?']
+  ]},
+  'Travel abroad': { color:'#ffd166', items:[
+    ['I have lost my passport.','Я потерял паспорт.'],
+    ['Where is the embassy of Kazakhstan?','Где посольство Казахстана?'],
+    ['I missed my flight.','Я опоздал на рейс.'],
+    ['I need to call my parents.','Мне нужно позвонить родителям.'],
+    ['My phone is dead. Can I use yours?','Мой телефон разрядился. Можно ваш?'],
+    ['Can you show me on the map?','Покажите на карте.'],
+    ['I do not have any money.','У меня нет денег.'],
+    ['Please take me to the police station.','Отведите меня в полицию.']
+  ]},
+  'Home safety': { color:'#6ee7b7', items:[
+    ['I smell gas!','Я чувствую запах газа!'],
+    ['Do not turn on the lights.','Не включайте свет.'],
+    ['Open the windows.','Откройте окна.'],
+    ['The power is out.','Нет электричества.'],
+    ['Water is coming through the ceiling.','С потолка течёт вода.'],
+    ['I am locked out of my house.','Я не могу попасть домой.'],
+    ['Do not touch it. It is dangerous.','Не трогайте. Это опасно.'],
+    ['Keep away from children.','Держите подальше от детей.']
+  ]},
+  'Water and nature': { color:'#22d3ee', items:[
+    ['Help! He is drowning!','Помогите! Он тонет!'],
+    ['Throw him a rope.','Бросьте ему верёвку.'],
+    ['I was bitten by a snake.','Меня укусила змея.'],
+    ['I got stung by a bee.','Меня ужалила пчела.'],
+    ['I am lost in the forest.','Я заблудился в лесу.'],
+    ['It is very cold. I need a blanket.','Очень холодно. Мне нужно одеяло.'],
+    ['The ice is thin. Stay back!','Лёд тонкий. Отойдите!'],
+    ['I have heatstroke.','У меня тепловой удар.']
+  ]}
+});
 const tabsEl = $('tabs'), listEl = $('phraseList'), searchEl = $('search');
 let currentTopic = 'Fire';
 function card(en, ru, color){
@@ -357,6 +448,32 @@ const kb = [
     tip:'Say a landmark if you are not sure of the address.' },
   { keys:['hello','hi','привет','здравств','thanks','спасибо'], t:'Hello', say:'Hello! Tell me what is happening and I will give you the English words to say.', ph:[], tip:'' }
 ];
+kb.splice(kb.length - 1, 0,
+  { keys:['gas','газ','запах'], t:'Gas leak', say:'Do not use fire or switches. Open windows, leave and call 104 or 112.',
+    ph:[['I smell gas in my flat!','Я чувствую запах газа в квартире!'],['Please send the gas service.','Пришлите газовую службу.'],['Everyone has left the building.','Все вышли из здания.']],
+    tip:'Do not turn lights on or off. Do not use a lighter.' },
+  { keys:['burn','ожог','обжёг','обжег','hot water','кипят'], t:'Burn', say:'Cool the burn with cool running water for 10 minutes.',
+    ph:[['I have burned my hand.','Я обжёг руку.'],['It is a bad burn. I need a doctor.','Сильный ожог. Нужен врач.'],['Do you have a first aid kit?','У вас есть аптечка?']],
+    tip:'Do not use ice, butter or toothpaste.' },
+  { keys:['choke','подавил','поперх','подавилс','задых'], t:'Choking', say:'Ask: Can you speak? If not, call 112 and give back blows.',
+    ph:[['He is choking! Please help!','Он подавился! Помогите!'],['Can you cough? Can you speak?','Вы можете кашлять? Говорить?'],['I need an ambulance now.','Мне срочно нужна скорая.']],
+    tip:'Five back blows between the shoulder blades, then five abdominal thrusts.' },
+  { keys:['heart','сердц','chest','грудь','давлен'], t:'Heart problem', say:'Sit down, stay calm and call 103 or 112.',
+    ph:[['I think it is a heart attack.','Кажется, это сердечный приступ.'],['My chest hurts and my left arm hurts too.','Болит грудь и левая рука.'],['He is pale and sweating.','Он бледный и потеет.']],
+    tip:'Do not walk around. Sit and wait for the ambulance.' },
+  { keys:['allerg','аллерг','bee','пчел','sting','ужал','rash','сыпь'], t:'Allergy', say:'If breathing is difficult, call 112 at once.',
+    ph:[['I am allergic to nuts.','У меня аллергия на орехи.'],['My face is swollen.','У меня отекло лицо.'],['I have a rash and itching.','У меня сыпь и зуд.']],
+    tip:'Say what caused it: food, medicine or insect.' },
+  { keys:['drown','тону','тонет','water','вода','river','река','lake','озеро','ice','лёд','лед'], t:'Water danger', say:'Shout for help, throw something that floats and call 112. Do not jump in.',
+    ph:[['Help! He is drowning!','Помогите! Он тонет!'],['Throw him a rope or a lifebuoy.','Бросьте ему верёвку или круг.'],['Call the rescue service!','Вызовите спасателей!']],
+    tip:'Never go onto thin ice to rescue someone.' },
+  { keys:['passport','паспорт','embassy','посольств','money','деньги','phone','телефон','airport','аэропорт'], t:'Travel problem', say:'Go to the police, then contact your embassy and your family.',
+    ph:[['I have lost my passport.','Я потерял паспорт.'],['I need to contact the embassy of Kazakhstan.','Мне нужно связаться с посольством Казахстана.'],['Can I use your phone, please?','Можно воспользоваться вашим телефоном?']],
+    tip:'Keep a photo of your passport on your phone.' },
+  { keys:['snake','змея','bite','укус','dog','собак'], t:'Bite', say:'Stay still and calm. Call 103 or 112.',
+    ph:[['I was bitten by a dog.','Меня укусила собака.'],['I was bitten by a snake.','Меня укусила змея.'],['I need medical help.','Мне нужна медицинская помощь.']],
+    tip:'Wash the wound and go to hospital.' }
+);
 const chat = $('aiChat'), input = $('aiInput');
 function bubble(cls, html){
   const d = document.createElement('div');
@@ -388,7 +505,7 @@ function ask(text){
   botReply(text);
 }
 $('aiForm').addEventListener('submit', e => { e.preventDefault(); ask(input.value); input.value = ''; });
-['Fire / пожар','Someone fainted','I am lost','Police / полиция','Earthquake','Car accident','What is my address?'].forEach(c => {
+['Fire / пожар','Someone fainted','I am lost','Police / полиция','Earthquake','Car accident','Gas leak','Burn','Choking','Allergy','Lost passport','What is my address?'].forEach(c => {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'chip'; b.textContent = c;
   b.onclick = () => ask(c); $('chips').appendChild(b);
@@ -469,6 +586,16 @@ const quiz = [
   ['What should you do first on a call to 112?',['Say what happened and where you are','Hang up','Tell a long story']],
   ['"Unconscious" means...',['без сознания','голодный','уставший']]
 ];
+quiz.push(
+  ['What number is for the fire service?',['101','102','103']],
+  ['"I smell gas" in Russian is...',['Я чувствую запах газа','Я люблю газ','Мне жарко']],
+  ['"Where is the pharmacy?" means...',['Где аптека?','Где школа?','Где вокзал?']],
+  ['"Allergic" means...',['аллергический','агрессивный','активный']],
+  ['You lost your passport abroad. Who do you contact?',['The embassy','A taxi driver','A shop']],
+  ['"Stay away from windows" is used for...',['an earthquake or a storm','a birthday','a lesson']],
+  ['"Drowning" means...',['тонуть','танцевать','тренироваться']],
+  ['What do you NOT do when you smell gas?',['Turn on a lighter','Open windows','Leave the room']]
+);
 let qi = 0, score = 0;
 function showQ(){
   $('qFeedback').textContent = ''; $('qNext').hidden = true; $('qChoices').innerHTML = '';
@@ -495,6 +622,85 @@ function showQ(){
   });
 }
 showQ();
+
+
+/* ===== Flashcards ===== */
+let deck = [], di = 0, showRu = false, known = 0;
+function buildDeck(){ deck = []; Object.values(topics).forEach(t => t.items.forEach(i => deck.push(i))); deck = shuffle(deck); di = 0; known = 0; showCard(); }
+function showCard(){
+  if(!deck.length) return;
+  const [en, ru] = deck[di];
+  $('flash').classList.toggle('ru', showRu);
+  $('fcSide').textContent = showRu ? 'Русский' : 'English';
+  $('fcText').textContent = showRu ? ru : en;
+  $('fcCount').textContent = 'Card ' + (di + 1) + ' of ' + deck.length + ' · Known: ' + known;
+}
+$('flash').onclick = () => { showRu = !showRu; showCard(); };
+$('fcSay').onclick = () => speak(deck[di][0]);
+$('fcNext').onclick = () => { di = (di + 1) % deck.length; showRu = false; showCard(); speak(deck[di][0]); };
+$('fcShuffle').onclick = () => { showRu = false; buildDeck(); };
+$('fcKnow').onclick = () => { known++; di = (di + 1) % deck.length; showRu = false; showCard(); };
+buildDeck();
+
+/* ===== Signs ===== */
+const signs = [
+  ['🚪','Exit','Выход'],['🔥','Danger: Fire','Опасно: огонь'],['⚠️','Warning','Внимание'],['⛔','No entry','Вход запрещён'],
+  ['🚑','Ambulance','Скорая помощь'],['🏥','Hospital','Больница'],['💊','Pharmacy','Аптека'],['🧯','Fire extinguisher','Огнетушитель'],
+  ['☣️','Danger: Keep out','Опасно: не входить'],['🚭','No smoking','Не курить'],['⚡','High voltage','Высокое напряжение'],['🏃','Emergency exit','Аварийный выход'],
+  ['🛟','Lifebuoy','Спасательный круг'],['🩹','First aid','Первая помощь'],['📞','Emergency phone','Аварийный телефон'],['🚧','Road closed','Дорога закрыта']
+];
+signs.forEach(([e, en, ru]) => {
+  const b = document.createElement('button');
+  b.className = 'sign'; b.type = 'button';
+  b.innerHTML = '<i>' + e + '</i><b>' + en + '</b><small>' + ru + '</small>';
+  b.onclick = () => speak(en); $('signGrid').appendChild(b);
+});
+
+/* ===== First aid ===== */
+const aid = [
+  ['Someone is not breathing (CPR)', [
+    ['Call 112 and say: He is not breathing.','Позвоните 112: Он не дышит.'],
+    ['Lay him on his back on a hard floor.','Положите его на спину на твёрдую поверхность.'],
+    ['Push hard and fast in the centre of the chest.','Нажимайте сильно и быстро в центр груди.'],
+    ['Do not stop until help arrives.','Не останавливайтесь, пока не приедет помощь.']]],
+  ['Heavy bleeding', [
+    ['Press on the wound with a clean cloth.','Прижмите рану чистой тканью.'],
+    ['Do not remove the cloth. Add another one.','Не снимайте ткань. Добавьте ещё одну.'],
+    ['Raise the injured arm or leg.','Поднимите раненую руку или ногу.'],
+    ['Call an ambulance.','Вызовите скорую.']]],
+  ['Burn', [
+    ['Cool the burn under cool water for ten minutes.','Охлаждайте ожог прохладной водой десять минут.'],
+    ['Do not use ice or butter.','Не используйте лёд или масло.'],
+    ['Cover it with a clean, loose bandage.','Накройте чистой свободной повязкой.'],
+    ['Go to hospital if it is large.','Идите в больницу, если ожог большой.']]],
+  ['Choking', [
+    ['Ask: Are you choking? Can you speak?','Спросите: Вы подавились? Можете говорить?'],
+    ['Give five back blows.','Сделайте пять ударов по спине.'],
+    ['Give five abdominal thrusts.','Сделайте пять толчков в живот.'],
+    ['Call 112 if it does not stop.','Звоните 112, если не помогает.']]],
+  ['Fainting', [
+    ['Lay the person down and raise the legs.','Положите человека и поднимите ноги.'],
+    ['Loosen tight clothes.','Расстегните тесную одежду.'],
+    ['Open a window for fresh air.','Откройте окно для свежего воздуха.'],
+    ['If he does not wake up, call 103.','Если не приходит в себя, звоните 103.']]]
+];
+aid.forEach(([title, steps]) => {
+  const d = document.createElement('details');
+  const s = document.createElement('summary'); s.textContent = title; d.appendChild(s);
+  const ol = document.createElement('ol');
+  steps.forEach(([en, ru], i) => {
+    const li = document.createElement('li'), b = document.createElement('button');
+    b.type = 'button'; b.innerHTML = '🔊 ' + (i + 1) + '. ' + en + '<small>' + ru + '</small>';
+    b.onclick = () => speak(en); li.appendChild(b); ol.appendChild(li);
+  });
+  d.appendChild(ol); $('aidList').appendChild(d);
+});
+
+/* ===== Random phrase button ===== */
+$('randBtn').onclick = () => {
+  const [en] = deck[Math.floor(Math.random() * deck.length)];
+  $('randBtn').textContent = '🔊 ' + en; speak(en);
+};
 
 </script>
 </body>
